@@ -1,23 +1,24 @@
 package entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 
- abstract public  class Person{
+abstract public  class Person{
      private int id ;
 
     protected String nom;
     protected String prenom;
     protected LocalDate dateDeNaissance;
     protected String ville;
-    protected int nombreEnfants;
-    protected double investissement;
-    protected double placement;
+    protected String nombreEnfants;
+    protected String investissement;
+    protected String placement;
     protected String situationFamiliale;
     protected LocalDateTime createdAt;
     protected double score;
 
     public Person(String nom, String prenom, LocalDate dateDeNaissance, String ville,
-                    int nombreEnfants, double investissement, double placement,
+                    String nombreEnfants, String investissement, String placement,
                     String situationFamiliale, LocalDateTime createdAt, double score) {
         this.nom = nom;
         this.prenom = prenom;
@@ -68,6 +69,10 @@ import java.time.LocalDateTime;
          return dateDeNaissance;
      }
 
+     public int getAge() {
+         return Period.between(this.dateDeNaissance, LocalDate.now()).getYears();
+     }
+
      public void setDateDeNaissance(LocalDate dateDeNaissance) {
          this.dateDeNaissance = dateDeNaissance;
      }
@@ -80,27 +85,27 @@ import java.time.LocalDateTime;
          this.ville = ville;
      }
 
-     public int getNombreEnfants() {
+     public String getNombreEnfants() {
          return nombreEnfants;
      }
 
-     public void setNombreEnfants(int nombreEnfants) {
+     public void setNombreEnfants(String nombreEnfants) {
          this.nombreEnfants = nombreEnfants;
      }
 
-     public double getPlacement() {
+     public String getPlacement() {
          return placement;
      }
 
-     public void setPlacement(double placement) {
+     public void setPlacement(String placement) {
          this.placement = placement;
      }
 
-     public double getInvestissement() {
+     public String getInvestissement() {
          return investissement;
      }
 
-     public void setInvestissement(double investissement) {
+     public void setInvestissement(String investissement) {
          this.investissement = investissement;
      }
 

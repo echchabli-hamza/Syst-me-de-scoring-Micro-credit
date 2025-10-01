@@ -1,19 +1,17 @@
 package entity;
 
-import entity.Person;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Employe extends Person {
     private double salaire;
-    private int anciennete;
+    private String anciennete;
     private String poste;
     private String typeContrat;
     private String secteur;
 
-    public Employe(String nom, String prenom, LocalDate dateDeNaissance, String ville,int nombreEnfants, double investissement, double placement,String situationFamiliale, LocalDateTime createdAt, double score,
-                   double salaire, int anciennete, String poste,String typeContrat, String secteur) {
+    public Employe(String nom, String prenom, LocalDate dateDeNaissance, String ville, String nombreEnfants, String investissement, String placement, String situationFamiliale, LocalDateTime createdAt, double score,
+                   double salaire, String anciennete, String poste, String typeContrat, String secteur) {
 
         super(nom, prenom, dateDeNaissance, ville, nombreEnfants, investissement, placement,
                 situationFamiliale, createdAt, score);
@@ -57,11 +55,11 @@ public class Employe extends Person {
         this.poste = poste;
     }
 
-    public int getAnciennete() {
+    public String getAnciennete() {
         return anciennete;
     }
 
-    public void setAnciennete(int anciennete) {
+    public void setAnciennete(String anciennete) {
         this.anciennete = anciennete;
     }
 }

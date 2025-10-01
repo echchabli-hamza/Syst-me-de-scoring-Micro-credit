@@ -1,9 +1,9 @@
 import entity.Person;
-import entity.Professionnel;
-import repos.UserDao;
+import service.CalculScore;
 import util.GetConst;
 
 import entity.Employe;
+import util.RuleChain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +13,8 @@ public class Main {
 
 
         GetConst constants = new GetConst();
+
+        CalculScore cs =new CalculScore();
 
 //        UserDao uD =new UserDao();
 //
@@ -28,23 +30,28 @@ public class Main {
 //        }
 
 
+//       GetConst.chain.printRules();
 
-        System.out.println("=== CATEGORIE REGLE ===");
-        GetConst.categorieRegle.forEach((categorie, map) -> {
-            System.out.println("Categorie: " + categorie);
-            map.forEach((cle, points) -> {
-                System.out.println("  " + cle + " -> " + points + " pts");
-            });
-        });
 
-        System.out.println("\n=== REGLES NUMERIQUES ===");
-        GetConst.regles.forEach((categorie, map) -> {
-            System.out.println("Categorie: " + categorie);
-            map.forEach((valeur, points) -> {
-                System.out.println("  " + valeur + " -> " + points + " pts");
-            });
-        });
+        Employe e = new Employe(
+                "Echchabli",               // nom
+                "Hamza",                   // prenom
+                LocalDate.of(1998, 5, 10), // dateDeNaissance
+                "Casablanca",              // ville
+                "ENFANTS_0",                         // nombreEnfants
+                "INVEST_PLAC",                   // investissement
+                "INVEST_PLAC",                    // placement
+                "CELIB",             // situationFamiliale
+                LocalDateTime.now(),       // createdAt
+                0.0,                      // score
+                15000.0,                   // salaire
+                "ANCIENNETE_>=5",                         // anciennete (years)
+                "Développeur",             // poste
+                "CDI",                     // typeContrat
+                "PUBLIC"             // secteur
+        );
 
+        cs.index(e);
 
 
 

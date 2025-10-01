@@ -11,7 +11,7 @@ public class Professionnel extends Person {
     private String activite;
 
     public Professionnel(String nom, String prenom, LocalDate dateDeNaissance, String ville,
-                         int nombreEnfants, double investissement, double placement,
+                         String nombreEnfants, String investissement, String placement,
                          String situationFamiliale, LocalDateTime createdAt, double score,
                          double revenu, String immatriculationFiscale,
                          String secteurActivite, String activite) {

@@ -1,51 +1,89 @@
 package service;
 
 import entity.Person;
+import entity.Employe;
+import entity.Professionnel;
+import util.RuleChain;
 import util.GetConst;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
+import java.time.Period;
 
 public class CalculScore {
 
+    private RuleChain rc;
+
+    public CalculScore() {
+        GetConst constants = new GetConst(); // loads DB rules
+        this.rc = constants.chain;
+    }
+
+    public void employeScore(Employe p){
 
 
-    GetConst constants = new GetConst();
+        int score = 0 ;
+
+        score+=rc.evaluate("EMPLOI" , "ANCIENNETE" , p.getAnciennete());
+
+        score+=rc.evaluate("EMPLOI" , "TYPE" , p.getTypeContrat()+"_"+ p.getSecteur());
 
 
-//    public Employe(String nom, String prenom, LocalDate dateDeNaissance,
-//                   String ville, int nombreEnfants, double investissement, double placement, String situationFamiliale,
-//                   LocalDateTime createdAt, double score,
-//                   double salaire, int anciennete, String poste, String typeContrat, String secteur)
+        score+=rc.evaluate("FAMILLE" , "ENFANTS" , p.getNombreEnfants());
 
+        score+=rc.evaluate("FAMILLE" , "SITUATION" , p.getSituationFamiliale());
 
-    public int index(Person p ){
-
-        int score =0;
-
-
-
+        score+=rc.evaluate("PATRIMOINE" , "INVESTISSEMENTS" , p.getInvestissement());
 
 
 
 
 
+        score+=rc.evaluate("RELATION_CLIENT_EXISTANT" , "ANCIENNETE" , "ANCIENNETE_>3");
 
-       return  score ;
+      score+=rc.evaluate(p.getSalaire());
+
+      score+=rc.evaluate(p.getAge());
+
+
+        System.out.print(score);
+
+
+
     }
 
 
+    public void proScore(Employe p){
+
+
+        int score = 0 ;
+
+        score+=rc.evaluate("EMPLOI" , "ANCIENNETE" , p.getAnciennete());
+
+        score+=rc.evaluate("EMPLOI" , "TYPE" , p.getTypeContrat()+"_"+ p.getSecteur());
+
+
+        score+=rc.evaluate("FAMILLE" , "ENFANTS" , p.getNombreEnfants());
+
+        score+=rc.evaluate("FAMILLE" , "SITUATION" , p.getSituationFamiliale());
+
+        score+=rc.evaluate("PATRIMOINE" , "INVESTISSEMENTS" , p.getInvestissement());
 
 
 
 
 
+        score+=rc.evaluate("RELATION_CLIENT_EXISTANT" , "ANCIENNETE" , "ANCIENNETE_>3");
+
+        score+=rc.evaluate(p.getSalaire());
+
+        score+=rc.evaluate(p.getAge());
+
+
+        System.out.print(score);
 
 
 
-
+    }
 
 
 }

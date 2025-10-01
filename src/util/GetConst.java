@@ -7,53 +7,55 @@ public class GetConst {
 
     private static Connection conn = DB.getInstance().getConnection();
 
-    public static HashMap<String, HashMap<String, Integer>> categorieRegle = new HashMap<>();
-    public static HashMap<String, HashMap<Double, Integer>> regles = new HashMap<>();
+    public static RuleChain chain = new RuleChain();
 
     public GetConst() {
-        getReglesCategorique();
-        getRegles();
+        loadPathRules();
+        loadRangeRules();
     }
 
-    private void getReglesCategorique() {
-        String sql = "SELECT * FROM regles_categorie";
+    // --------------------- Path rules ---------------------
+    private void loadPathRules() {
+        String sql = "SELECT * FROM path_rules";
 
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                String categorie = rs.getString("categorie");
-                String cle = rs.getString("cle");
+                String category = rs.getString("category");
+                String subCategory = rs.getString("sub_category"); // optional
+                String value = rs.getString("value");
                 int points = rs.getInt("points");
 
-                // computeIfAbsent creates inner map if missing
-                categorieRegle.computeIfAbsent(categorie, k -> new HashMap<>())
-                        .put(cle, points);
+                if (subCategory != null && !subCategory.isEmpty()) {
+                    chain.addRule(points, category, subCategory, value);
+                } else {
+                    chain.addRule(points, category, value);
+                }
             }
 
         } catch (SQLException e) {
-            System.err.println("Error fetching categorical rules: " + e.getMessage());
+            System.err.println("Error fetching path rules: " + e.getMessage());
         }
     }
 
-    private void getRegles() {
-        String sql = "SELECT * FROM regles";
+    // --------------------- Range rules ---------------------
+    private void loadRangeRules() {
+        String sql = "SELECT * FROM range_rules";
 
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                String categorie = rs.getString("categorie");
-                Double valeurMin = rs.getObject("valeur_min") != null ? rs.getDouble("valeur_min") : null;
-                Integer points = rs.getInt("points");
+                Double minValue = rs.getObject("min_value") != null ? rs.getDouble("min_value") : 0;
+                Double maxValue = rs.getObject("max_value") != null ? rs.getDouble("max_value") : null;
+                int points = rs.getInt("points");
 
-                // Use Double keys even if nullable
-                regles.computeIfAbsent(categorie, k -> new HashMap<>())
-                        .put(valeurMin, points);
+                chain.addRangeRule(points, minValue, maxValue);
             }
 
         } catch (SQLException e) {
-            System.err.println("Error fetching rules: " + e.getMessage());
+            System.err.println("Error fetching range rules: " + e.getMessage());
         }
     }
 }

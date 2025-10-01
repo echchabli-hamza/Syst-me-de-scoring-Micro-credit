@@ -24,9 +24,9 @@ public class UserDao {
             ps.setString(2, client.getPrenom());
             ps.setDate(3, Date.valueOf(client.getDateDeNaissance()));
             ps.setString(4, client.getVille());
-            ps.setInt(5, client.getNombreEnfants());
-            ps.setDouble(6, client.getInvestissement());
-            ps.setDouble(7, client.getPlacement());
+            ps.setString(5, client.getNombreEnfants());
+            ps.setString(6, client.getInvestissement());
+            ps.setString(7, client.getPlacement());
             ps.setString(8, client.getSituationFamiliale());
             ps.setTimestamp(9, Timestamp.valueOf(client.getCreatedAt()));
             ps.setDouble(10, client.getScore());
@@ -42,7 +42,7 @@ public class UserDao {
                     try (PreparedStatement psEmp = conn.prepareStatement(sqlEmp)) {
                         psEmp.setInt(1, PersonId);
                         psEmp.setDouble(2, e.getSalaire());
-                        psEmp.setInt(3, e.getAnciennete());
+//                        psEmp.set(3, e.getAnciennete());
                         psEmp.setString(4, e.getPoste());
                         psEmp.setString(5, e.getTypeContrat());
                         psEmp.setString(6, e.getSecteur());
@@ -73,25 +73,25 @@ public class UserDao {
 
 
 
-    public void updateClient(Person client) {
-        String sql = "UPDATE Person SET nom=?, prenom=?, date_de_naissance=?, ville=?, nombre_enfants=?, " +
-                "investissement=?, placement=?, situation_familiale=?, score=? WHERE id=?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, client.getNom());
-            ps.setString(2, client.getPrenom());
-            ps.setDate(3, Date.valueOf(client.getDateDeNaissance()));
-            ps.setString(4, client.getVille());
-            ps.setInt(5, client.getNombreEnfants());
-            ps.setDouble(6, client.getInvestissement());
-            ps.setDouble(7, client.getPlacement());
-            ps.setString(8, client.getSituationFamiliale());
-            ps.setDouble(9, client.getScore());
-            ps.setInt(10, client.getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void updateClient(Person client) {
+//        String sql = "UPDATE Person SET nom=?, prenom=?, date_de_naissance=?, ville=?, nombre_enfants=?, " +
+//                "investissement=?, placement=?, situation_familiale=?, score=? WHERE id=?";
+//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+//            ps.setString(1, client.getNom());
+//            ps.setString(2, client.getPrenom());
+//            ps.setDate(3, Date.valueOf(client.getDateDeNaissance()));
+//            ps.setString(4, client.getVille());
+//            ps.setInt(5, client.getNombreEnfants());
+//            ps.setDouble(6, client.getInvestissement());
+//            ps.setDouble(7, client.getPlacement());
+//            ps.setString(8, client.getSituationFamiliale());
+//            ps.setDouble(9, client.getScore());
+//            ps.setInt(10, client.getId());
+//            ps.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     public Person getClient(int id) {
@@ -106,9 +106,9 @@ public class UserDao {
                         rs.getString("prenom"),
                         rs.getDate("date_de_naissance").toLocalDate(),
                         rs.getString("ville"),
-                        rs.getInt("nombre_enfants"),
-                        rs.getDouble("investissement"),
-                        rs.getDouble("placement"),
+                        rs.getString("nombre_enfants"),
+                        rs.getString("investissement"),
+                        rs.getString("placement"),
                         rs.getString("situation_familiale"),
                         rs.getTimestamp("created_at").toLocalDateTime(),
                         rs.getDouble("score")
@@ -144,9 +144,9 @@ public class UserDao {
                         rs.getString("prenom"),
                         rs.getDate("date_de_naissance").toLocalDate(),
                         rs.getString("ville"),
-                        rs.getInt("nombre_enfants"),
-                        rs.getDouble("investissement"),
-                        rs.getDouble("placement"),
+                        rs.getString("nombre_enfants"),
+                        rs.getString("investissement"),
+                        rs.getString("placement"),
                         rs.getString("situation_familiale"),
                         rs.getTimestamp("created_at").toLocalDateTime(),
                         rs.getDouble("score")

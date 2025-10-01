@@ -12,9 +12,9 @@ public class UserService {
         userDao.createClient(client);
     }
 
-    public void updateClient(Person client) {
-        userDao.updateClient(client);
-    }
+//    public void updateClient(Person client) {
+//        userDao.updateClient(client);
+//    }
 
     public Person getClientById(int id) {
         return userDao.getClient(id);
