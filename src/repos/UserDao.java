@@ -14,14 +14,16 @@ public class UserDao {
     private Connection conn = DB.getInstance().getConnection();
 
 
-    public void createClient(Person client) {
+    public boolean createClient(Person client) {
         String sqlPerson = "INSERT INTO Person " +
                 "(nom, prenom, date_de_naissance, ville, nombre_enfants, investissement, placement, situation_familiale, created_at, score) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement ps = conn.prepareStatement(sqlPerson)) {
+        try (PreparedStatement ps = conn.prepareStatement(sqlPerson, Statement.RETURN_GENERATED_KEYS) ){
             ps.setString(1, client.getNom());
             ps.setString(2, client.getPrenom());
+            System.out.println(client.getDateDeNaissance());
+            System.out.println(Date.valueOf(client.getDateDeNaissance()));
             ps.setDate(3, Date.valueOf(client.getDateDeNaissance()));
             ps.setString(4, client.getVille());
             ps.setString(5, client.getNombreEnfants());
@@ -30,23 +32,26 @@ public class UserDao {
             ps.setString(8, client.getSituationFamiliale());
             ps.setTimestamp(9, Timestamp.valueOf(client.getCreatedAt()));
             ps.setDouble(10, client.getScore());
+            ps.executeUpdate();
+            ResultSet id =ps.getGeneratedKeys();
+            int PersonId = 0;
+            if (id.next()) {
 
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                int PersonId = rs.getInt("id");
+             PersonId = id.getInt(1);
+            }
+            System.out.println("person id"  +  PersonId);
 
-                // If the client is an Employe
                 if (client instanceof Employe) {
                     Employe e = (Employe) client;
                     String sqlEmp = "INSERT INTO employe (Person_id, salaire, anciennete, poste, type_contrat, secteur) VALUES (?, ?, ?, ?, ?, ?)";
                     try (PreparedStatement psEmp = conn.prepareStatement(sqlEmp)) {
                         psEmp.setInt(1, PersonId);
                         psEmp.setDouble(2, e.getSalaire());
-//                        psEmp.set(3, e.getAnciennete());
+                       psEmp.setString(3, e.getAnciennete());
                         psEmp.setString(4, e.getPoste());
                         psEmp.setString(5, e.getTypeContrat());
                         psEmp.setString(6, e.getSecteur());
-                        psEmp.executeUpdate();
+                        return psEmp.executeUpdate()>0;
                     }
                 }
 
@@ -60,14 +65,17 @@ public class UserDao {
                         psPro.setString(3, p.getImmatriculationFiscale());
                         psPro.setString(4, p.getSecteurActivite());
                         psPro.setString(5, p.getActivite());
-                        psPro.executeUpdate();
+                        return  psPro.executeUpdate()>0;
                     }
                 }
-            }
+
 
         } catch (SQLException e) {
             e.printStackTrace();
+
         }
+
+        return false ;
     }
 
 
@@ -118,6 +126,7 @@ public class UserDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+
         }
         return null;
     }

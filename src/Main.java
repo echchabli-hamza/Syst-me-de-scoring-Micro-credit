@@ -1,9 +1,15 @@
+import entity.Credit;
 import entity.Person;
+import entity.Professionnel;
 import service.CalculScore;
+import service.CreditService;
 import util.GetConst;
+
+import util.Session ;
 
 import entity.Employe;
 import util.RuleChain;
+import view.UserView;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,97 +22,75 @@ public class Main {
 
         CalculScore cs =new CalculScore();
 
-//        UserDao uD =new UserDao();
-//
-//
-//
-//        uD.deleteClient(1);
-//
-//
-//        for (Person e : uD.listClients()){
-//
-//            System.out.println(e.toString());
-//
-//        }
-
-
-//       GetConst.chain.printRules();
 
 
         Employe e = new Employe(
-                "Echchabli",               // nom
-                "Hamza",                   // prenom
-                LocalDate.of(1998, 5, 10), // dateDeNaissance
-                "Casablanca",              // ville
-                "ENFANTS_0",                         // nombreEnfants
-                "INVEST_PLAC",                   // investissement
-                "INVEST_PLAC",                    // placement
-                "CELIB",             // situationFamiliale
-                LocalDateTime.now(),       // createdAt
-                0.0,                      // score
-                15000.0,                   // salaire
-                "ANCIENNETE_>=5",                         // anciennete (years)
-                "Développeur",             // poste
-                "CDI",                     // typeContrat
-                "PUBLIC"             // secteur
+                "Echchabli",
+                "Hamza",
+                LocalDate.of(1998, 5, 10),
+                "Casablanca",
+                "ENFANTS_0",
+                "INVEST_PLAC",
+                "INVEST_PLAC",
+                "CELIB",
+                LocalDateTime.now(),
+                0.0,
+                15000.0,
+                "ANCIENNETE_>=5",
+                "Développeur",
+                "CDD",
+                "INTERIM"
         );
+//
 
-        cs.index(e);
+//
+//        Professionnel professionnel = new Professionnel(
+//                "Echchabli",
+//                "Hamza",
+//                LocalDate.of(1995, 3, 22),
+//                "Rabat",
+//                "ENFANTS_1-2",
+//                "INVEST_PLAC",
+//                "INVEST_PLAC",
+//                "MARI",
+//                LocalDateTime.now(),
+//                0.0,
+//                25000.0,
+//                "IF123456789",
+//                "PROF_LIBERALE",
+//                "Import-Export"
+//        );
+//
+//
+//
+//
+       System.out.println(cs.employeScore(e));
+
+
+
+//        Credit credit = new Credit(
+//                LocalDate.now(),
+//                120000,   // montant demandé
+//                4.5,      // taux d’intérêt
+//                60,       // durée en mois
+//                "IMMOBILIER"
+//        );
+//
+//        double salaire = 150000;
+//        double score = 82;
+//        boolean clientExistant = true;
+//
+     // CreditService.evaluerCredit(credit, salaire, score, clientExistant);
+//
+//        System.out.println(credit);
+
+//
+//        UserView uv = new UserView();
+//
+//        uv.showMenu();
 
 
 
     }
-
-
-
-
-
-//
-//        Professionnel pro = new Professionnel(
-//                "El Amrani",                // nom
-//                "Youssef",                  // prenom
-//                LocalDate.of(1990, 3, 12),  // dateNaissance
-//                "Rabat",                    // ville
-//                2,                          // nombreEnfants
-//                20000.0,                    // investissement
-//                15000.0,                    // placement
-//                "Marié",                    // situation_familiale
-//                LocalDateTime.now(),        // createdAt
-//                0,                          // score (initial)
-//                12000.0,                    // revenu
-//                "IF123456",                 // immatriculation fiscale
-//                "Commerce",                 // secteur activité
-//                "Boutiquier"                // activité
-//        );
-
-
-
-
-
-
-
-
-//        uD.createClient(
-//                 new Employe(
-//                        "Dupont",                  // nom
-//                        "Jean",                    // prenom
-//                        LocalDate.of(1985, 3, 15), // dateNaissance
-//                        "Paris",                   // ville
-//                        2,                         // nombreEnfants
-//                        5000.0,                    // investissement
-//                        3000.0,                    // placement
-//                        "Marié",                   // situationFamiliale
-//                        LocalDateTime.now(),       // createdAt
-//                        85.5,                      // score
-//                        3500.0,                    // salaire
-//                        10,                        // anciennete
-//                        "Développeur",             // poste
-//                        "CDI",                     // typeContrat
-//                        "Grande_Entreprise"        // secteur
-//                )
-//        );
-
-
-
 
 }

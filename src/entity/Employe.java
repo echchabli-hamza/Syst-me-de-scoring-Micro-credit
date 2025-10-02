@@ -62,4 +62,25 @@ public class Employe extends Person {
     public void setAnciennete(String anciennete) {
         this.anciennete = anciennete;
     }
+
+    @Override
+    public String toString() {
+        return "Employe{" +
+                "salaire=" + salaire +
+                ", anciennete='" + anciennete + '\'' +
+                ", poste='" + poste + '\'' +
+                ", typeContrat='" + typeContrat + '\'' +
+                ", secteur='" + secteur + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", ville='" + ville + '\'' +
+                ", dateDeNaissance=" + dateDeNaissance +
+                ", nombreEnfants='" + nombreEnfants + '\'' +
+                ", situationFamiliale='" + situationFamiliale + '\'' +
+                ", placement='" + placement + '\'' +
+                ", investissement='" + investissement + '\'' +
+                ", score=" + score +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

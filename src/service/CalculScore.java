@@ -18,7 +18,7 @@ public class CalculScore {
         this.rc = constants.chain;
     }
 
-    public void employeScore(Employe p){
+    public int employeScore(Employe p){
 
 
         int score = 0 ;
@@ -47,19 +47,20 @@ public class CalculScore {
 
         System.out.print(score);
 
+        return score;
+
 
 
     }
 
 
-    public void proScore(Employe p){
+    public int proScore(Professionnel p){
 
 
         int score = 0 ;
 
-        score+=rc.evaluate("EMPLOI" , "ANCIENNETE" , p.getAnciennete());
 
-        score+=rc.evaluate("EMPLOI" , "TYPE" , p.getTypeContrat()+"_"+ p.getSecteur());
+        score+=rc.evaluate("EMPLOI" , "TYPE" , p.getSecteurActivite());
 
 
         score+=rc.evaluate("FAMILLE" , "ENFANTS" , p.getNombreEnfants());
@@ -74,12 +75,14 @@ public class CalculScore {
 
         score+=rc.evaluate("RELATION_CLIENT_EXISTANT" , "ANCIENNETE" , "ANCIENNETE_>3");
 
-        score+=rc.evaluate(p.getSalaire());
+        score+=rc.evaluate(p.getRevenu());
 
         score+=rc.evaluate(p.getAge());
 
 
         System.out.print(score);
+
+        return score;
 
 
 
