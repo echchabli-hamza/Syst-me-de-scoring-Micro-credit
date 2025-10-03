@@ -13,9 +13,12 @@ public class CalculScore {
 
     private RuleChain rc;
 
+    private CreditService cs;
+
     public CalculScore() {
         GetConst constants = new GetConst();
         this.rc = constants.chain;
+        this.cs=new CreditService();
     }
 
     public int employeScore(Employe p){

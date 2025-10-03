@@ -8,6 +8,8 @@ import repos.EcheanceRepo;
 import util.Session;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,13 +39,12 @@ public class CreditService {
 
         boolean   clientExistant = isAncienClient(id);
 
-        System.out.println("");
 
 
         Credit c = new Credit(amount ,tauxInteret , dureeEnMois);
 
 
-        return evaluerCredit(c , salaire ,score ,clientExistant);
+        return evaluerCredit(c , salaire ,score ,clientExistant , id);
 
     }
 
@@ -57,8 +58,11 @@ public class CreditService {
         return creditrepo.hasActiveCredit(personId);
     }
 
-    public Credit evaluerCredit(Credit credit, double salaire, double score, boolean clientExistant) {
+    public Credit evaluerCredit(Credit credit, double salaire, double score, boolean clientExistant , int id) {
         double plafond = 0;
+
+        int anc = checkAncian(id);
+        score+=anc;
 
         if (!clientExistant) {
 
@@ -92,6 +96,7 @@ public class CreditService {
 
         return credit;
     }
+
 
 
 
@@ -139,9 +144,31 @@ public class CreditService {
     }
 
 
+    public int checkAncian(int personId) {
+        LocalDate oldestCreditDate = creditrepo.getOldestCredit(personId);
 
+        if (oldestCreditDate == null) {
 
+            return 0;
+        }
+
+        long years = ChronoUnit.YEARS.between(oldestCreditDate, LocalDate.now());
+
+        if (years > 3) {
+            return 10;
+        } else if (years >= 1) {
+            return 8;
+        } else {
+            return 5;
+        }
     }
+
+
+
+
+
+
+}
 
 
 

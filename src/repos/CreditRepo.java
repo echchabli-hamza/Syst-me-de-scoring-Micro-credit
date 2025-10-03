@@ -1,6 +1,7 @@
 package repos;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,6 +134,24 @@ public class CreditRepo {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public LocalDate getOldestCredit(int personId) {
+        String sql = "SELECT MIN(date_de_credit) AS oldest_date FROM Credit WHERE person_id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, personId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getObject("oldest_date", java.time.LocalDate.class);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération de l'ancien crédit : " + e.getMessage());
+        }
+
+        return null;
     }
 
 

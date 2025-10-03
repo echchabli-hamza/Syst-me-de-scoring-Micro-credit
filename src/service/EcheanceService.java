@@ -126,7 +126,7 @@ public class EcheanceService {
 
 
     public void updateAllEcheanceStatus() {
-        System.out.println("for ech upd");
+
         try {
             List<Echeance> allEcheances = echeanceRepo.getAll(); // get all echeances
             LocalDate today = LocalDate.now();
