@@ -57,7 +57,6 @@ public class UserDao {
                     }
                 }
 
-                // If the client is a Professionnel
                 if (client instanceof Professionnel) {
                     Professionnel p = (Professionnel) client;
                     String sqlPro = "INSERT INTO professionnel (Person_id, revenu, immatriculation_fiscale, secteur_activite, activite) VALUES (?, ?, ?, ?, ?)";
@@ -81,59 +80,6 @@ public class UserDao {
     }
 
 
-
-
-//    public void updateClient(Person client) {
-//        String sql = "UPDATE Person SET nom=?, prenom=?, date_de_naissance=?, ville=?, nombre_enfants=?, " +
-//                "investissement=?, placement=?, situation_familiale=?, score=? WHERE id=?";
-//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setString(1, client.getNom());
-//            ps.setString(2, client.getPrenom());
-//            ps.setDate(3, Date.valueOf(client.getDateDeNaissance()));
-//            ps.setString(4, client.getVille());
-//            ps.setInt(5, client.getNombreEnfants());
-//            ps.setDouble(6, client.getInvestissement());
-//            ps.setDouble(7, client.getPlacement());
-//            ps.setString(8, client.getSituationFamiliale());
-//            ps.setDouble(9, client.getScore());
-//            ps.setInt(10, client.getId());
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
-//    public Person getClient(int id) {
-//        String sql = "SELECT * FROM Person WHERE id=?";
-//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setInt(1, id);
-//            ResultSet rs = ps.executeQuery();
-//            if (rs.next()) {
-//                // return Person object (or you can JOIN to get Employe/Professionnel)
-//                Person p = new Person(
-//                        rs.getString("nom"),
-//                        rs.getString("prenom"),
-//                        rs.getDate("date_de_naissance").toLocalDate(),
-//                        rs.getString("ville"),
-//                        rs.getString("nombre_enfants"),
-//                        rs.getString("investissement"),
-//                        rs.getString("placement"),
-//                        rs.getString("situation_familiale"),
-//                        rs.getTimestamp("created_at").toLocalDateTime(),
-//                        rs.getDouble("score")
-//                ) {};
-//                p.setId(id);
-//                return p;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//
-//        }
-//        return null;
-//    }
-
-
     public Person getClient(int id) {
         try {
 
@@ -154,7 +100,7 @@ public class UserDao {
                 System.out.println("before");
                 if (rs.next()) {
                     System.out.println("hiif,after");
-                    // Store Person data in variables
+
                     nom = rs.getString("nom");
                     prenom = rs.getString("prenom");
                     dateDeNaissance = rs.getDate("date_de_naissance").toLocalDate();
@@ -166,11 +112,10 @@ public class UserDao {
                     createdAt = rs.getTimestamp("created_at").toLocalDateTime();
                     score = rs.getDouble("score");
                 } else {
-                    return null ;// person not found
+                    return null ;
                 }
             }
 
-            // Check if this person is an Employe
             String sqlEmp = "SELECT * FROM employe WHERE Person_id = ?";
             try (PreparedStatement psEmp = conn.prepareStatement(sqlEmp)) {
                 psEmp.setInt(1, id);
@@ -198,7 +143,6 @@ public class UserDao {
                 }
             }
 
-            // Check if this person is a Professionnel
             String sqlPro = "SELECT * FROM professionnel WHERE Person_id = ?";
             try (PreparedStatement psPro = conn.prepareStatement(sqlPro)) {
                 psPro.setInt(1, id);

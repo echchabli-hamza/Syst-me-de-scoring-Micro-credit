@@ -81,4 +81,16 @@ public class Echeance {
     public void setStatutPaiement(StatutPaiement statutPaiement) {
         this.statutPaiement = statutPaiement;
     }
+
+    @Override
+    public String toString() {
+        return "Echeance{" +
+                "id=" + id +
+                ", creditId=" + creditId +
+                ", dateEcheance=" + dateEcheance +
+                ", mensualite=" + mensualite +
+                ", dateDePaiement=" + dateDePaiement +
+                ", statutPaiement=" + statutPaiement +
+                '}';
+    }
 }

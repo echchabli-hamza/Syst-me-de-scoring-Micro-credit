@@ -95,20 +95,18 @@ public class CreditService {
 
 
 
-    public List<Echeance> consulterEcheancesParUser(int userId) {
+    public List<Echeance> consulterEcheances(int creditId) {
         List<Echeance> result = new ArrayList<>();
-        try {
-
-            Credit cr = creditrepo.findActiveById(userId);
+        System.out.println("from credit service before");
 
 
-                List<Echeance> echeances = er.consulterEcheancesParCredit(cr.getId());
+            System.out.println("from credit service after");
+
+                List<Echeance> echeances = er.consulterEcheances(creditId);
                 result.addAll(echeances);
 
 
-        } catch (SQLException ex) {
-            System.err.println("Erreur lors de la consultation des échéances: " + ex.getMessage());
-        }
+
         return result;
     }
 
@@ -121,6 +119,21 @@ public class CreditService {
 
 
         er.createEcheances(res ,c.getMontantOctroye() , c.getDureeEnMois() , c.getTauxInteret() );
+
+
+    }
+
+
+    public boolean makePayment(int id){
+
+         return  er.payerEcheance(id);
+
+    }
+
+    public List<Credit> getAllC(int id){
+
+
+        return creditrepo.findAllByUserId(id);
 
 
     }

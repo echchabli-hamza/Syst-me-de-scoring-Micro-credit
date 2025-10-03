@@ -24,27 +24,11 @@ public class Main {
 
 
 
-        Employe e = new Employe(
-                "Echchabli",
-                "Hamza",
-                LocalDate.of(1998, 5, 10),
-                "Casablanca",
-                "ENFANTS_0",
-                "INVEST_PLAC",
-                "INVEST_PLAC",
-                "CELIB",
-                LocalDateTime.now(),
-                0.0,
-                15000.0,
-                "ANCIENNETE_>=5",
-                "Développeur",
-                "CDD",
-                "INTERIM"
-        );
 
-//
+
+
       UserView uv = new UserView();
-//
+
         uv.showMenu();
 
 

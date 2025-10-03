@@ -20,6 +20,8 @@ public class UserView {
     private CalculScore cs = new CalculScore();
     private Scanner scanner = new Scanner(System.in);
 
+    private CreditView cv = new CreditView() ;
+
     public void showMenu() {
         int choice = -1;
         while (choice != 0) {
@@ -29,7 +31,7 @@ public class UserView {
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -37,7 +39,12 @@ public class UserView {
                     break;
 
                 case 2 :
-                   getCridet() ;break;
+                   getCridet() ;
+                   break;
+                case 3 :
+                   cv.showMenu();
+
+                   break;
 
                 case 0:
                     System.out.println("Exiting...");
@@ -122,7 +129,7 @@ public class UserView {
             situationFamiliale = "Marié";
         }
 
-        // employee data
+
 
         if(type==1){
             System.out.print("Entrez le salaire : ");
@@ -277,7 +284,7 @@ public class UserView {
             System.out.println("2. Auto-entrepreneur");
 
             int secteurChoice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
+            scanner.nextLine();
 
             String secteurActivite;
 
@@ -334,15 +341,7 @@ public class UserView {
     }
 
 
-    private void desition(int score) {
-        if (score >= 80) {
-            System.out.println("Accord immédiat");
-        } else if (score >= 60) {
-            System.out.println("Orientation vers étude manuelle");
-        } else {
-            System.out.println("Refus automatique");
-        }
-    }
+
 
     public void getCridet() {
 

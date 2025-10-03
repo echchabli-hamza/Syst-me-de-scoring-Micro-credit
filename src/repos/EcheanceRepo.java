@@ -5,6 +5,7 @@ import entity.Echeance;
 import util.DB;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class EcheanceRepo {
             stmt.setInt(1, e.getCreditId());
             stmt.setDate(2, Date.valueOf(e.getDateEcheance()));
             stmt.setDouble(3, e.getMensualite());
-            stmt.setNull(4, Types.DATE); // always null at creation
+            stmt.setNull(4, Types.DATE);
             stmt.setString(5, null);
 
             return stmt.executeUpdate() > 0;
@@ -49,7 +50,12 @@ public class EcheanceRepo {
                 e.setMensualite(rs.getDouble("mensualite"));
                 Date datePaiement = rs.getDate("date_de_paiement");
                 if (datePaiement != null) e.setDateDePaiement(datePaiement.toLocalDate());
-                e.setStatutPaiement(Echeance.StatutPaiement.valueOf(rs.getString("statut_paiement")));
+
+                e.setStatutPaiement(
+                        rs.getString("statut_paiement") != null
+                                ? Echeance.StatutPaiement.valueOf(rs.getString("statut_paiement"))
+                                : null
+                );
                 return e;
             }
             return null;
@@ -58,7 +64,7 @@ public class EcheanceRepo {
 
 
     public List<Echeance> getAllByCreditId(int creditId) throws SQLException {
-        List<Echeance> list = new ArrayList<>();
+        List<Echeance> list = new ArrayList<>(); System.out.println( "from aerga3");
         String sql = "SELECT * FROM Echeance WHERE credit_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, creditId);
@@ -71,18 +77,27 @@ public class EcheanceRepo {
                 e.setMensualite(rs.getDouble("mensualite"));
                 Date datePaiement = rs.getDate("date_de_paiement");
                 if (datePaiement != null) e.setDateDePaiement(datePaiement.toLocalDate());
-                e.setStatutPaiement(Echeance.StatutPaiement.valueOf(rs.getString("statut_paiement")));
+
+                e.setStatutPaiement(
+                        rs.getString("statut_paiement") != null
+                                ? Echeance.StatutPaiement.valueOf(rs.getString("statut_paiement"))
+                                : null
+                );
+
                 list.add(e);
+
+
             }
         }
         return list;
     }
 
     public boolean updateStatutPaiement(int echeanceId, Echeance.StatutPaiement newStatut) throws SQLException {
-        String sql = "UPDATE Echeance SET statut_paiement = ? WHERE id = ?";
+        String sql = "UPDATE Echeance SET statut_paiement = ? , date_de_paiement = ? WHERE id = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, newStatut.name());
-            stmt.setInt(2, echeanceId);
+            stmt.setDate(2,Date.valueOf( LocalDate.now()));
+            stmt.setInt(3, echeanceId);
             return stmt.executeUpdate() > 0;
         }
     }

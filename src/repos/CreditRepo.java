@@ -1,6 +1,8 @@
 package repos;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import entity.Credit;
 import util.DB;
@@ -30,7 +32,7 @@ public class CreditRepo {
 
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                return rs.getInt(1); // return generated Credit.id
+                return rs.getInt(1);
             }
         }catch (SQLException e){
             System.err.println(e.getMessage());
@@ -60,8 +62,34 @@ public class CreditRepo {
         return null;
     }
 
+    public List<Credit> findAllByUserId(int userId) {
+        List<Credit> credits = new ArrayList<>();
+        String sql = "SELECT * FROM Credit WHERE person_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Credit c = new Credit();
+                c.setId(rs.getInt("id"));
+                c.setDateDeCredit(rs.getObject("date_de_credit", java.time.LocalDate.class));
+                c.setMontantDemande(rs.getDouble("montant_demande"));
+                c.setMontantOctroye(rs.getDouble("montant_octroye"));
+                c.setTauxInteret(rs.getDouble("taux_interet"));
+                c.setDureeEnMois(rs.getInt("duree_en_mois"));
+                c.setTypeCredit(rs.getString("type_credit"));
+                c.setDecision(rs.getString("decision") != null ? Credit.Decision.valueOf(rs.getString("decision")) : null);
+                c.setStatus(rs.getBoolean("status"));
+                credits.add(c);
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return credits;
+    }
+
+
     public Credit findActiveById(int id) throws SQLException {
-        String sql = "SELECT * FROM Credit WHERE id = ? AND status = false"; // only ongoing
+        String sql = "SELECT * FROM Credit WHERE id = ? AND status = false";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();

@@ -14,7 +14,7 @@ public class CalculScore {
     private RuleChain rc;
 
     public CalculScore() {
-        GetConst constants = new GetConst(); // loads DB rules
+        GetConst constants = new GetConst();
         this.rc = constants.chain;
     }
 

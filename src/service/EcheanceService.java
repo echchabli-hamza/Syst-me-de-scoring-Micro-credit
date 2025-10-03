@@ -36,7 +36,7 @@ public class EcheanceService {
             e.setCreditId(creditId);
             e.setDateEcheance(dateEcheance);
             e.setMensualite(mensualite);
-            e.setDateDePaiement(null); // not paid yet
+            e.setDateDePaiement(null);
             e.setStatutPaiement(null);
 
             echeanceRepo.save(e);
@@ -45,9 +45,16 @@ public class EcheanceService {
 
     }
 
-    public List<Echeance> consulterEcheancesParCredit(int creditId) {
+    public List<Echeance> consulterEcheances(int creditId) {
+        System.out.println("from eche service before");
+
         try {
+
+            System.out.println("from credit service after");
+
             return echeanceRepo.getAllByCreditId(creditId);
+
+
         } catch (SQLException e) {
             System.err.println("Erreur récupération échéances: " + e.getMessage());
             return new ArrayList<>();
