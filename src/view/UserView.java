@@ -411,7 +411,7 @@ public class UserView {
             // After valid amount is entered
             res.setMontantOctroye(res.getMontantDemande());
             System.out.println("Immediate approval: montant octroye = " + res.getMontantOctroye());
-            creditS.createCridect(res  ,id );
+            creditS.createCridect(res,id);
 
         } else if (res.getDecision() == Credit.Decision.ETUDE_MANUELLE) {
 

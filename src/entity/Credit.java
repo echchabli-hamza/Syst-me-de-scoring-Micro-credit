@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class Credit {
 
 
+    private int id ;
     private LocalDate dateDeCredit;
     private double montantDemande;
     private double montantOctroye;
@@ -34,6 +35,13 @@ public class Credit {
 
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public void setMontantOctroye(double montantOctroye) {
         this.montantOctroye = montantOctroye;
