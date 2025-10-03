@@ -1,12 +1,15 @@
 package service;
 
 import entity.Credit;
+import entity.Echeance;
 import entity.Employe;
 import repos.CreditRepo;
 import repos.EcheanceRepo;
 import util.Session;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreditService {
 
@@ -90,6 +93,26 @@ public class CreditService {
         return credit;
     }
 
+
+
+    public List<Echeance> consulterEcheancesParUser(int userId) {
+        List<Echeance> result = new ArrayList<>();
+        try {
+
+            Credit cr = creditrepo.findActiveById(userId);
+
+
+                List<Echeance> echeances = er.consulterEcheancesParCredit(cr.getId());
+                result.addAll(echeances);
+
+
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la consultation des échéances: " + ex.getMessage());
+        }
+        return result;
+    }
+
+
     public void createCridect(Credit c , int id) {
 
 
@@ -105,4 +128,9 @@ public class CreditService {
 
 
 
-}
+    }
+
+
+
+
+

@@ -60,6 +60,30 @@ public class CreditRepo {
         return null;
     }
 
+    public Credit findActiveById(int id) throws SQLException {
+        String sql = "SELECT * FROM Credit WHERE id = ? AND status = false"; // only ongoing
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Credit c = new Credit();
+                c.setDateDeCredit(rs.getObject("date_de_credit", java.time.LocalDate.class));
+                c.setMontantDemande(rs.getDouble("montant_demande"));
+                c.setMontantOctroye(rs.getDouble("montant_octroye"));
+                c.setTauxInteret(rs.getDouble("taux_interet"));
+                c.setDureeEnMois(rs.getInt("duree_en_mois"));
+                c.setTypeCredit(rs.getString("type_credit"));
+                c.setDecision(rs.getString("decision") != null ? Credit.Decision.valueOf(rs.getString("decision")) : null);
+                c.setStatus(rs.getBoolean("status"));
+                return c;
+            }
+        } catch (SQLException s) {
+            System.err.println(s.getMessage());
+        }
+        return null;
+    }
+
+
 
     public boolean hasActiveCredit(int personId) {
         String sql = "SELECT 1 FROM Credit WHERE person_id = ? AND status = false LIMIT 1";
@@ -82,5 +106,6 @@ public class CreditRepo {
             throw new RuntimeException(e);
         }
     }
+
 
 }
