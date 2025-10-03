@@ -1,6 +1,8 @@
 package view;
 
+import entity.Credit;
 import service.CalculScore;
+import service.CreditService;
 import service.UserService;
 import entity.Person;
 import entity.Employe;
@@ -14,6 +16,7 @@ import java.util.Scanner;
 public class UserView {
 
     private UserService userService = new UserService();
+    private CreditService creditS = new CreditService();
     private CalculScore cs = new CalculScore();
     private Scanner scanner = new Scanner(System.in);
 
@@ -34,7 +37,8 @@ public class UserView {
                     break;
 
                 case 2 :
-//                   getCridet();
+                   getCridet() ;break;
+
                 case 0:
                     System.out.println("Exiting...");
                     break;
@@ -239,7 +243,7 @@ public class UserView {
 
             int ss=cs.employeScore(employeC);
 
-
+             employeC.setScore(ss);
             System.out.println(ss);
             Session.setUser(employeC);
 
@@ -340,43 +344,116 @@ public class UserView {
         }
     }
 
-    public void getCridet(int id) {
+    public void getCridet() {
 
-
+        System.out.println("enter you id ");
+        int id = scanner.nextInt();
         Person client = userService.getClientById(id);
 
         if (client != null) {
 
+
             Session.setUser(client);
 
+            boolean active = creditS.hasActiveCredit(id);
+            if(active){
+
+                System.out.print("you have active credit you cant get one ");
+
+                return ;
+
+            }
+
+
+            System.out.println("enter the amount you want");
+
+            double amount = scanner.nextDouble();
+
+            scanner.nextLine();
+
+            System.out.println("entrer le tauxInteret ");
+
+            double tauxInteret = scanner.nextDouble();
+
+            scanner.nextLine();
+            System.out.println("entrer le tauxInteret ");
+
+            int dureeEnMois = scanner.nextInt();
+
+            scanner.nextLine();
+
+            Credit res = creditS.handleCredit(amount , tauxInteret , dureeEnMois);
+
+
+            handleRes(res ,id );
+
+
+
 
         } else {
+
             System.out.println("Aucun client trouvé avec l'id " + id);
+
         }
     }
 
+    private void handleRes(Credit res , int id) {
 
 
+        if (res.getDecision() == Credit.Decision.ACCORD_IMMEDIAT) {
 
-
-
-
-    public int desitionAut(int score, boolean anci) {
-        if (anci) {
-            if (score > 80) {
-                return 10;
-            } else if (score > 50 && score <= 79) {
-                return 7;
+            while (res.getMontantDemande() > res.getPlafond()) {
+                System.out.println("You can get up to " + res.getPlafond() + ". Enter a new montant:");
+                double newMontant = scanner.nextDouble();
+                res.setMontantDemande(newMontant);
             }
+
+            // After valid amount is entered
+            res.setMontantOctroye(res.getMontantDemande());
+            System.out.println("Immediate approval: montant octroye = " + res.getMontantOctroye());
+            creditS.createCridect(res  ,id );
+
+        } else if (res.getDecision() == Credit.Decision.ETUDE_MANUELLE) {
+
+            while (res.getMontantDemande() > res.getPlafond()) {
+                System.out.println("Maximum allowed: " + res.getPlafond() + ". Enter a new montant:");
+                double newMontant = scanner.nextDouble();
+                res.setMontantDemande(newMontant);
+            }
+            System.out.println("Manual review needed. oui ou non");
+            String answer = scanner.nextLine().trim().toLowerCase();
+
+            if (answer.equals("non")) {
+
+                System.out.println("your are not allowed to get a credit");
+
+                return;
+
+            }
+
+
+
+            System.out.println("Manual review completed: montant octroye = " + res.getMontantOctroye());
+
+            creditS.createCridect(res  ,id );
+
+            System.out.println(res.toString());
+
+
+            return ;
+        }
+         else if (res.getDecision() == Credit.Decision.REFUS_AUTOMATIQUE) {
+            System.out.println("votre score n'est pas suffisant ") ;
+            return ;
         } else {
-            if (score > 80) {
-                return 4;
-            } else if (score > 60 && score <= 79) {
-                return 4;
-            }
+            System.out.println("Unknown decision");
+            return ;
         }
-        return 0;
+
     }
+
+
+
 
 
 

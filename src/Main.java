@@ -64,7 +64,7 @@ public class Main {
 //
 //
 //
-       System.out.println(cs.employeScore(e));
+    //    System.out.println(cs.employeScore(e));
 
 
 
@@ -85,9 +85,9 @@ public class Main {
 //        System.out.println(credit);
 
 //
-//        UserView uv = new UserView();
+      UserView uv = new UserView();
 //
-//        uv.showMenu();
+        uv.showMenu();
 
 
 

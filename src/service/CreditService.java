@@ -1,35 +1,100 @@
 package service;
 
 import entity.Credit;
+import entity.Employe;
+import repos.CreditRepo;
+import util.Session;
+
+import java.sql.SQLException;
 
 public class CreditService {
 
+    private CreditRepo creditrepo; // assume this is initialized via constructor or DI
+
+    public CreditService() {
+
+        this.creditrepo = new CreditRepo();
+    }
 
 
 
-    public static void evaluerCredit(Credit credit, double salaire, double score, boolean clientExistant) {
+
+
+    public  Credit handleCredit(double amount ,double tauxInteret ,int dureeEnMois){
+
+
+        int id = ((Employe)Session.getUser()).getId();
+
+        double salaire = ((Employe)Session.getUser()).getSalaire();
+
+        double score = ((Employe)Session.getUser()).getScore();
+
+        boolean   clientExistant = isAncienClient(id);
+
+        System.out.println("");
+
+
+        Credit c = new Credit(amount ,tauxInteret , dureeEnMois);
+
+
+        return evaluerCredit(c , salaire ,score ,clientExistant);
+
+    }
+
+
+    public boolean isAncienClient(int personId)   {
+        return creditrepo.isAncienClient(personId);
+    }
+
+
+    public boolean hasActiveCredit(int personId)   {
+        return creditrepo.hasActiveCredit(personId);
+    }
+
+    public Credit evaluerCredit(Credit credit, double salaire, double score, boolean clientExistant) {
         double plafond = 0;
 
-        if (!clientExistant) { // Nouveau client
-            plafond = 4 * salaire;
-        } else { // Client existant
-            if (score > 80) {
-                plafond = 10 * salaire;
-            } else if (score >= 60) {
-                plafond = 7 * salaire;
-            } else {
+        if (!clientExistant) {
+
+            if (score < 70) {
                 credit.setDecision(Credit.Decision.REFUS_AUTOMATIQUE);
                 credit.setMontantOctroye(0);
-                return;
+                return credit;
+            } else if (score < 80) {
+                credit.setPlafond( 4 * salaire);
+                credit.setDecision(Credit.Decision.ETUDE_MANUELLE);
+            } else {
+                credit.setPlafond( 4 * salaire);
+                credit.setDecision(Credit.Decision.ACCORD_IMMEDIAT);
+
+                System.out.println("from ACCORD_IMMEDIAT");
+            }
+        } else {
+
+            if (score < 60) {
+                credit.setDecision(Credit.Decision.REFUS_AUTOMATIQUE);
+                credit.setMontantOctroye(0);
+                return credit;
+            } else if (score < 80) {
+                credit.setPlafond( 7 * salaire);
+                credit.setDecision(Credit.Decision.ETUDE_MANUELLE);
+            } else {
+                credit.setPlafond( 10 * salaire);
+                credit.setDecision(Credit.Decision.ACCORD_IMMEDIAT);
             }
         }
 
-        if (credit.getMontantDemande() <= plafond) {
-            credit.setMontantOctroye(credit.getMontantDemande());
-            credit.setDecision(Credit.Decision.ACCORD_IMMEDIAT);
-        } else {
-            credit.setMontantOctroye(plafond);
-            credit.setDecision(Credit.Decision.ETUDE_MANUELLE);
-        }
+        return credit;
     }
+
+    public void createCridect(Credit c , int id) {
+
+        creditrepo.save(c, id);
+
+
+    }
+
+
+
+
 }

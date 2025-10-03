@@ -6,6 +6,8 @@ import entity.Employe;
 import entity.Professionnel;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +63,7 @@ public class UserDao {
                     String sqlPro = "INSERT INTO professionnel (Person_id, revenu, immatriculation_fiscale, secteur_activite, activite) VALUES (?, ?, ?, ?, ?)";
                     try (PreparedStatement psPro = conn.prepareStatement(sqlPro)) {
                         psPro.setInt(1, PersonId);
-                        psPro.setDouble(2, p.getRevenu());
+                        psPro.setDouble(2, p.getSalaire());
                         psPro.setString(3, p.getImmatriculationFiscale());
                         psPro.setString(4, p.getSecteurActivite());
                         psPro.setString(5, p.getActivite());
@@ -102,33 +104,134 @@ public class UserDao {
 //    }
 
 
+//    public Person getClient(int id) {
+//        String sql = "SELECT * FROM Person WHERE id=?";
+//        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+//            ps.setInt(1, id);
+//            ResultSet rs = ps.executeQuery();
+//            if (rs.next()) {
+//                // return Person object (or you can JOIN to get Employe/Professionnel)
+//                Person p = new Person(
+//                        rs.getString("nom"),
+//                        rs.getString("prenom"),
+//                        rs.getDate("date_de_naissance").toLocalDate(),
+//                        rs.getString("ville"),
+//                        rs.getString("nombre_enfants"),
+//                        rs.getString("investissement"),
+//                        rs.getString("placement"),
+//                        rs.getString("situation_familiale"),
+//                        rs.getTimestamp("created_at").toLocalDateTime(),
+//                        rs.getDouble("score")
+//                ) {};
+//                p.setId(id);
+//                return p;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//
+//        }
+//        return null;
+//    }
+
+
     public Person getClient(int id) {
-        String sql = "SELECT * FROM Person WHERE id=?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                // return Person object (or you can JOIN to get Employe/Professionnel)
-                Person p = new Person(
-                        rs.getString("nom"),
-                        rs.getString("prenom"),
-                        rs.getDate("date_de_naissance").toLocalDate(),
-                        rs.getString("ville"),
-                        rs.getString("nombre_enfants"),
-                        rs.getString("investissement"),
-                        rs.getString("placement"),
-                        rs.getString("situation_familiale"),
-                        rs.getTimestamp("created_at").toLocalDateTime(),
-                        rs.getDouble("score")
-                ) {};
-                p.setId(id);
-                return p;
+        try {
+
+            String sqlPerson = "SELECT * FROM Person WHERE id = ?";
+
+            String nom = null, prenom = null, ville = null, nombreEnfants = null;
+            String investissement = null, placement = null, situationFamiliale = null;
+            LocalDate dateDeNaissance = null;
+            LocalDateTime createdAt = null;
+            double score = 0.0;
+
+            Person e;
+
+
+            try (PreparedStatement ps = conn.prepareStatement(sqlPerson)) {
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                System.out.println("before");
+                if (rs.next()) {
+                    System.out.println("hiif,after");
+                    // Store Person data in variables
+                    nom = rs.getString("nom");
+                    prenom = rs.getString("prenom");
+                    dateDeNaissance = rs.getDate("date_de_naissance").toLocalDate();
+                    ville = rs.getString("ville");
+                    nombreEnfants = rs.getString("nombre_enfants");
+                    investissement = rs.getString("investissement");
+                    placement = rs.getString("placement");
+                    situationFamiliale = rs.getString("situation_familiale");
+                    createdAt = rs.getTimestamp("created_at").toLocalDateTime();
+                    score = rs.getDouble("score");
+                } else {
+                    return null ;// person not found
+                }
             }
+
+            // Check if this person is an Employe
+            String sqlEmp = "SELECT * FROM employe WHERE Person_id = ?";
+            try (PreparedStatement psEmp = conn.prepareStatement(sqlEmp)) {
+                psEmp.setInt(1, id);
+                ResultSet rsEmp = psEmp.executeQuery();
+                if (rsEmp.next()) {
+                     e = new Employe(
+                            nom,
+                            prenom,
+                            dateDeNaissance,
+                            ville,
+                            nombreEnfants,
+                            investissement,
+                            placement,
+                            situationFamiliale,
+                            createdAt,
+                            score,
+                            rsEmp.getDouble("salaire"),
+                            rsEmp.getString("anciennete"),
+                            rsEmp.getString("poste"),
+                            rsEmp.getString("type_contrat"),
+                            rsEmp.getString("secteur")
+                    );
+                    e.setId(id);
+                    return e;
+                }
+            }
+
+            // Check if this person is a Professionnel
+            String sqlPro = "SELECT * FROM professionnel WHERE Person_id = ?";
+            try (PreparedStatement psPro = conn.prepareStatement(sqlPro)) {
+                psPro.setInt(1, id);
+                ResultSet rsPro = psPro.executeQuery();
+                if (rsPro.next()) {
+                     e = new Professionnel(
+                            nom,
+                            prenom,
+                            dateDeNaissance,
+                            ville,
+                            nombreEnfants,
+                            investissement,
+                            placement,
+                            situationFamiliale,
+                            createdAt,
+                            score,
+                            rsPro.getDouble("revenu"),
+                            rsPro.getString("immatriculation_fiscale"),
+                            rsPro.getString("secteur_activite"),
+                            rsPro.getString("activite")
+                    );
+                    e.setId(id);
+                    return e;
+                }
+            }
+
+
+            return null;
+
         } catch (SQLException e) {
             e.printStackTrace();
-
+            return null;
         }
-        return null;
     }
 
     public void deleteClient(int id) {

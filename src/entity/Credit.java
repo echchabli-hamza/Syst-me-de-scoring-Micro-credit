@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class Credit {
 
+
     private LocalDate dateDeCredit;
     private double montantDemande;
     private double montantOctroye;
@@ -11,7 +12,9 @@ public class Credit {
     private int dureeEnMois;
     private String typeCredit;
     private Decision decision;
-    private int status ;
+    private double plafond;
+    private boolean status ;
+
 
     public enum Decision {
         ACCORD_IMMEDIAT,
@@ -19,13 +22,16 @@ public class Credit {
         REFUS_AUTOMATIQUE
     }
 
-    public Credit(LocalDate dateDeCredit, double montantDemande, double tauxInteret,
-                  int dureeEnMois, String typeCredit) {
-        this.dateDeCredit = dateDeCredit;
+    public Credit() {
+    }
+
+    public Credit( double montantDemande, double tauxInteret,
+                  int dureeEnMois) {
+        this.dateDeCredit = LocalDate.now();
         this.montantDemande = montantDemande;
         this.tauxInteret = tauxInteret;
         this.dureeEnMois = dureeEnMois;
-        this.typeCredit = typeCredit;
+
     }
 
 
@@ -85,7 +91,26 @@ public class Credit {
         this.montantDemande = montantDemande;
     }
 
+    public boolean getStatus() {
+        return status;
+    }
 
+    public  void setStatus(boolean status) {
+        this.status = status;
+    }
+
+
+    public double getPlafond() {
+        return plafond;
+    }
+
+    public void setPlafond(double plafond) {
+        this.plafond = plafond;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
 
     @Override
     public String toString() {
@@ -96,7 +121,7 @@ public class Credit {
                 ", tauxInteret=" + tauxInteret +
                 ", dureeEnMois=" + dureeEnMois +
                 ", typeCredit='" + typeCredit + '\'' +
-                ", decision=" + decision +
+                ", decision=" + decision + " plafond :" + plafond+
                 '}';
     }
 }

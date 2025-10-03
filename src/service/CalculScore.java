@@ -75,7 +75,7 @@ public class CalculScore {
 
         score+=rc.evaluate("RELATION_CLIENT_EXISTANT" , "ANCIENNETE" , "ANCIENNETE_>3");
 
-        score+=rc.evaluate(p.getRevenu());
+        score+=rc.evaluate(p.getSalaire());
 
         score+=rc.evaluate(p.getAge());
 
@@ -87,6 +87,9 @@ public class CalculScore {
 
 
     }
+
+
+
 
 
 }

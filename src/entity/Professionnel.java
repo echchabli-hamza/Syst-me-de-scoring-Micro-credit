@@ -25,11 +25,11 @@ public class Professionnel extends Person {
         this.activite = activite;
     }
 
-    public double getRevenu() {
+    public double getSalaire() {
         return revenu;
     }
 
-    public void setRevenu(double revenu) {
+    public void setSalaire(double revenu) {
         this.revenu = revenu;
     }
 
