@@ -1,9 +1,7 @@
 package repos;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+
 import entity.Credit;
 import util.DB;
 
@@ -15,10 +13,10 @@ public class CreditRepo {
         this.conn = DB.getInstance().getConnection();
     }
 
-    public void save(Credit credit , int id)   {
+    public int save(Credit credit , int id)   {
         String sql = "INSERT INTO Credit (person_id, date_de_credit, montant_demande, montant_octroye, taux_interet, duree_en_mois, type_credit, decision, status) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS)) {
             stmt.setObject(1, id);
             stmt.setObject(2, credit.getDateDeCredit());
             stmt.setDouble(3, credit.getMontantDemande());
@@ -29,9 +27,16 @@ public class CreditRepo {
             stmt.setString(8, credit.getDecision() != null ? credit.getDecision().toString() : null);
             stmt.setBoolean(9,false );
             stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1); // return generated Credit.id
+            }
         }catch (SQLException e){
             System.err.println(e.getMessage());
+
         }
+        return 0;
     }
 
     public Credit findById(Long id) throws SQLException {

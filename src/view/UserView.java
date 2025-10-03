@@ -408,7 +408,7 @@ public class UserView {
                 res.setMontantDemande(newMontant);
             }
 
-            // After valid amount is entered
+
             res.setMontantOctroye(res.getMontantDemande());
             System.out.println("Immediate approval: montant octroye = " + res.getMontantOctroye());
             creditS.createCridect(res,id);
@@ -431,7 +431,7 @@ public class UserView {
 
             }
 
-
+            res.setMontantOctroye(res.getMontantDemande());
 
             System.out.println("Manual review completed: montant octroye = " + res.getMontantOctroye());
 

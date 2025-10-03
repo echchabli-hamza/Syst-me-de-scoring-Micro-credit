@@ -3,17 +3,20 @@ package service;
 import entity.Credit;
 import entity.Employe;
 import repos.CreditRepo;
+import repos.EcheanceRepo;
 import util.Session;
 
 import java.sql.SQLException;
 
 public class CreditService {
 
-    private CreditRepo creditrepo; // assume this is initialized via constructor or DI
+    private CreditRepo creditrepo;
+    private EcheanceService er;
 
     public CreditService() {
 
         this.creditrepo = new CreditRepo();
+        this.er = new EcheanceService();
     }
 
 
@@ -89,7 +92,12 @@ public class CreditService {
 
     public void createCridect(Credit c , int id) {
 
-        creditrepo.save(c, id);
+
+
+        int res = creditrepo.save(c, id);
+
+
+        er.createEcheances(res ,c.getMontantOctroye() , c.getDureeEnMois() , c.getTauxInteret() );
 
 
     }
