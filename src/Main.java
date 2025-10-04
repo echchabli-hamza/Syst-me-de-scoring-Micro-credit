@@ -1,6 +1,7 @@
 import entity.Credit;
 import entity.Person;
 import entity.Professionnel;
+import repos.AnalyticsService;
 import service.CalculScore;
 import service.CreditService;
 import service.EcheanceService;
@@ -17,6 +18,7 @@ import view.UserView;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,11 +31,16 @@ public class Main {
         scheduler.start();
 
 
+        AnalyticsService as = new AnalyticsService();
+
+        List<Person> l =as.getClientsAtRisk();
+
+        l.forEach(s-> System.out.println(s.toString()));
 
 
      UserView uv = new UserView();
 
-        uv.showMenu();
+   //   uv.showMenu();
 
 
 

@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 
-abstract public  class Person{
+ public  class Person{
      private int id ;
 
     protected String nom;
@@ -17,9 +17,12 @@ abstract public  class Person{
     protected LocalDateTime createdAt;
     protected double score;
 
-    public Person(String nom, String prenom, LocalDate dateDeNaissance, String ville,
-                    String nombreEnfants, String investissement, String placement,
-                    String situationFamiliale, LocalDateTime createdAt, double score) {
+     public Person() {
+     }
+
+     public Person(String nom, String prenom, LocalDate dateDeNaissance, String ville,
+                   String nombreEnfants, String investissement, String placement,
+                   String situationFamiliale, LocalDateTime createdAt, double score) {
         this.nom = nom;
         this.prenom = prenom;
         this.dateDeNaissance = dateDeNaissance;
