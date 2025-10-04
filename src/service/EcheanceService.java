@@ -128,12 +128,12 @@ public class EcheanceService {
     public void updateAllEcheanceStatus() {
 
         try {
-            List<Echeance> allEcheances = echeanceRepo.getAll(); // get all echeances
+            List<Echeance> allEcheances = echeanceRepo.getAll();
             LocalDate today = LocalDate.now();
 
             for (Echeance e : allEcheances) {
                 if (e.getStatutPaiement() != null) {
-                    continue; // already paid or status set, skip
+                    continue;
                 }
 
                 LocalDate echeancePlus5 = e.getDateEcheance().plusDays(5);
@@ -146,7 +146,7 @@ public class EcheanceService {
                     echeanceRepo.updateStatutPaiement(e.getId(), Echeance.StatutPaiement.ENRETARD);
                     System.out.println("Échéance " + e.getId() + " : ENRETARD");
                 }
-                // if none of the conditions match, skip
+
             }
 
         } catch (SQLException ex) {

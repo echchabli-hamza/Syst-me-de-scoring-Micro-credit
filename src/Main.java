@@ -30,22 +30,11 @@ public class Main {
 
 
 
-//        GetConst constants = new GetConst();
-//
-//        CalculScore cs =new CalculScore();
-//
-//
-//
-//
-//
-//
+
      UserView uv = new UserView();
 
         uv.showMenu();
 
-//        IncidentService is = new IncidentService();
-//
-//        is.generateIncidentsFromEcheances();
 
 
 

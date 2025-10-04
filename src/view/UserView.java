@@ -27,8 +27,10 @@ public class UserView {
         while (choice != 0) {
             System.out.println("\n===== User Menu =====");
             System.out.println("1. Create Account");
-            System.out.println("2. show user");
-            System.out.println("0. Exit");
+            System.out.println("2. get credit");
+            System.out.println("3. consult votre credit");
+            System.out.println("0. exit");
+
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
             scanner.nextLine();
