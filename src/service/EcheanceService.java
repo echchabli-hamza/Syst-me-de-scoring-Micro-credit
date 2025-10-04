@@ -124,4 +124,34 @@ public class EcheanceService {
         return success ;
     }
 
+
+    public void updateAllEcheanceStatus() {
+        try {
+            List<Echeance> allEcheances = echeanceRepo.getAll(); // get all echeances
+            LocalDate today = LocalDate.now();
+
+            for (Echeance e : allEcheances) {
+                if (e.getStatutPaiement() != null) {
+                    continue; // already paid or status set, skip
+                }
+
+                LocalDate echeancePlus5 = e.getDateEcheance().plusDays(5);
+                LocalDate echeancePlus30 = e.getDateEcheance().plusDays(30);
+
+                if (today.isAfter(echeancePlus30)) {
+                    echeanceRepo.updateStatutPaiement(e.getId(), Echeance.StatutPaiement.IMPAYENONREGLE);
+                    System.out.println("Échéance " + e.getId() + " : IMPAYENONREGLE");
+                } else if (today.isAfter(echeancePlus5)) {
+                    echeanceRepo.updateStatutPaiement(e.getId(), Echeance.StatutPaiement.ENRETARD);
+                    System.out.println("Échéance " + e.getId() + " : ENRETARD");
+                }
+                // if none of the conditions match, skip
+            }
+
+        } catch (SQLException ex) {
+            System.err.println("Erreur lors de la mise à jour des échéances : " + ex.getMessage());
+        }
+    }
+
+
 }

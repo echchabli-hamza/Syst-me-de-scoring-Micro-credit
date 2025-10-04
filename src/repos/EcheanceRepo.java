@@ -111,4 +111,42 @@ public class EcheanceRepo {
             return stmt.executeUpdate() > 0;
         }
     }
+
+    public List<Echeance> getAll() {
+        List<Echeance> echeances = new ArrayList<>();
+        String sql = "SELECT * FROM Echeance";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Echeance e = new Echeance();
+                e.setId(rs.getInt("id"));
+                e.setCreditId(rs.getInt("credit_id"));
+                e.setDateEcheance(rs.getDate("date_echeance").toLocalDate());
+                e.setMensualite(rs.getDouble("mensualite"));
+
+                Date paiementDate = rs.getDate("date_de_paiement");
+                if (paiementDate != null) {
+                    e.setDateDePaiement(paiementDate.toLocalDate());
+                }
+
+                String statut = rs.getString("statut_paiement");
+                if (statut != null) {
+                    e.setStatutPaiement(Echeance.StatutPaiement.valueOf(statut));
+                }
+
+                echeances.add(e);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error fetching echeances: " + ex.getMessage());
+        }
+
+        return echeances;
+    }
+
+
+
+
+
 }
