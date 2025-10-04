@@ -9,7 +9,9 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDao {
 
@@ -216,4 +218,40 @@ public class UserDao {
         }
         return clients;
     }
+
+    public List<Integer> getUserIdByIncident(int Id) {
+        List<Integer> result = new ArrayList<>();
+
+        String sql = "SELECT p.id AS person_id, p.score FROM Person p JOIN Credit c ON p.id = c.person_id JOIN Echeance e ON c.id = e.credit_id WHERE e.id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, Id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                 result.add(rs.getInt("person_id"));
+                result.add(rs.getInt("score"));
+
+                return result ;
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération de l'ID utilisateur par incident: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void updateScore(int userId, double newScore) {
+        String sql = "UPDATE person SET score = ? WHERE id = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDouble(1, newScore);
+            stmt.setInt(2, userId);
+            boolean r = stmt.executeUpdate() > 0 ;
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la mise à jour du score: " + e.getMessage());
+
+        }
+    }
+
+
 }

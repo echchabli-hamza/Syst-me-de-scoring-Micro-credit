@@ -23,6 +23,8 @@ public class IncidentService {
     public void generateIncidentsFromEcheances() {
         List<Echeance> echeances = echeanceRepo.getAll();
 
+
+
         for (Echeance e : echeances) {
            Echeance.StatutPaiement statut = e.getStatutPaiement();
 
@@ -56,7 +58,7 @@ public class IncidentService {
                     continue;
             }
 
-            incidentRepo.create(incident);
+                incidentRepo.create(incident);
         }
     }
 

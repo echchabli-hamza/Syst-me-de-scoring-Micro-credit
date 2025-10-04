@@ -23,4 +23,16 @@ public class Incident {
 
     public TypeIncident getTypeIncident() { return typeIncident; }
     public void setTypeIncident(TypeIncident typeIncident) { this.typeIncident = typeIncident; }
+
+
+    @Override
+    public String toString() {
+        return "Incident{" +
+                "id=" + id +
+                ", dateIncident=" + dateIncident +
+                ", echeanceId=" + echeanceId +
+                ", score=" + score +
+                ", typeIncident=" + typeIncident +
+                '}';
+    }
 }

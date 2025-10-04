@@ -14,8 +14,11 @@ public class Scheduler {
     public void start() {
         Runnable task = () -> {
             echeanceService.updateAllEcheanceStatus();
+
             incidentService.generateIncidentsFromEcheances();
-            System.out.println("Scheduler executed at: " + LocalTime.now());
+
+
+
         };
 
         LocalDateTime now = LocalDateTime.now();

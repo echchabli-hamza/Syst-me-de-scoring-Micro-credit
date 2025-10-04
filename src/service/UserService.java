@@ -1,7 +1,10 @@
 package service;
 
+import entity.Incident;
 import entity.Person;
 import repos.UserDao;
+
+import java.sql.SQLException;
 import java.util.List;
 import util.Session;
 
@@ -30,5 +33,36 @@ public class UserService {
     }
 
 
+    public void updateUserScore(Incident incident ) {
+
+            List<Integer> userId = userDao.getUserIdByIncident(incident.getEcheanceId());
+
+
+            if (userId == null) {
+                System.out.println("user id checking");
+
+                System.err.println("No user found for incident id " + incident.getEcheanceId());
+                return;
+            }
+
+
+
+
+        int uId = userId.get(0);
+
+        double scoreVal = userId.get(1)  + incident.getScore();
+
+
+
+
+
+        userDao.updateScore( uId , scoreVal);
+
+
+
+          System.out.println("User " + userId + " score updated by " + incident.getScore());
+
+
+    }
 
 }

@@ -26,7 +26,7 @@ public class Main {
 
 
         Scheduler scheduler = new Scheduler();
-        scheduler.start(); // starts daily execution at midnight
+        scheduler.start();
 
 
 

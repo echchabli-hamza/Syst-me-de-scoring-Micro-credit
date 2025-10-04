@@ -2,35 +2,55 @@ package repos;
 
 import entity.Incident;
 import entity.TypeIncident;
+import service.UserService;
 import util.DB;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class IncidentRepo {
 
     private Connection conn;
+    private UserService ud;
 
     public IncidentRepo() {
         this.conn = DB.getInstance().getConnection();
+        this.ud = new UserService();
     }
 
-   public void create(Incident incident) {
-    String sql = "INSERT INTO incident (date_incident, echeance_id, score, type_incident) " +
-                 "VALUES (?, ?, ?, ?) " +
-                 "ON CONFLICT (echeance_id, type_incident) DO NOTHING";
+    public void create(Incident incident) {
+        String sql = "INSERT INTO incident (date_incident, echeance_id, score, type_incident) " +
+                "VALUES (?, ?, ?, ?) " +
+                "ON CONFLICT (echeance_id, type_incident) DO NOTHING";
 
-    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setDate(1, Date.valueOf(incident.getDateIncident()));
-        stmt.setInt(2, incident.getEcheanceId());
-        stmt.setInt(3, incident.getScore());
-        stmt.setString(4, incident.getTypeIncident().name());
-        stmt.executeUpdate();
-    } catch (SQLException e) {
-        e.printStackTrace();
+        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setDate(1, Date.valueOf(incident.getDateIncident()));
+            stmt.setInt(2, incident.getEcheanceId());
+            stmt.setInt(3, incident.getScore());
+            stmt.setString(4, incident.getTypeIncident().name());
+
+            int affected = stmt.executeUpdate();
+
+            if (affected > 0) {
+                ResultSet rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+
+                    int id = rs.getInt(1);
+
+                    ud.updateUserScore(incident );
+
+
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println( e.getMessage());
+        }
+
     }
-}
+
 
     public List<Incident> getAll() {
         List<Incident> incidents = new ArrayList<>();
