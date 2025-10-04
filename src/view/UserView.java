@@ -11,6 +11,9 @@ import util.Session;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UserView {
@@ -32,8 +35,21 @@ public class UserView {
             System.out.println("0. exit");
 
             System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
-            scanner.nextLine();
+
+
+            while (choice != 0 && choice != 1 && choice != 2 && choice != 3) {
+                System.out.print("Enter your choice (0, 1, 2, or 3): ");
+                if (scanner.hasNextInt()) {
+                    choice = scanner.nextInt();
+                    scanner.nextLine(); // consume newline
+                    if (choice != 0 && choice != 1 && choice != 2 && choice != 3) {
+                        System.out.println("Invalid choice. Please enter 0, 1, 2, or 3.");
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.nextLine(); // clear invalid input
+                }
+            }
 
             switch (choice) {
                 case 1:
@@ -73,18 +89,50 @@ public class UserView {
         System.out.print("Enter city: ");
         String ville = scanner.nextLine();
 
+//
+//        System.out.print("Enter date of birth (yyyy-MM-dd): ");
+//        String dobInput = scanner.nextLine();
+        LocalDate dateNaissance = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        System.out.print("Enter date of birth (yyyy-MM-dd): ");
-        String dobInput = scanner.nextLine();
-        LocalDate dateNaissance = LocalDate.parse(dobInput);
+        while (dateNaissance == null) {
+            System.out.print("Enter date of birth (yyyy-MM-dd): ");
+            String dobInput = scanner.nextLine();
 
-
+            try {
+                dateNaissance = LocalDate.parse(dobInput, formatter);
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid format. Please enter the date as yyyy-MM-dd.");
+            }
+        }
         System.out.println("Choose number of children: ");
         System.out.println("1. 0 enfant");
         System.out.println("2. 1-2 enfants");
         System.out.println("3. >2 enfants");
-        int childChoice = scanner.nextInt();
-        scanner.nextLine();
+
+
+
+
+
+
+        int childChoice = 0;
+
+        while (childChoice < 1 || childChoice > 3) {
+            System.out.print("Enter number of children (1, 2, or 3): ");
+            try {
+                childChoice = scanner.nextInt();
+                if (childChoice < 1 || childChoice > 3) {
+                    System.out.println("Invalid choice. Please enter 1, 2, or 3.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // clear invalid input
+            }
+        }
+
+
+
+
 
         String nombreEnfants = "";
         switch (childChoice) {
@@ -109,7 +157,19 @@ public class UserView {
         System.out.println("oui ou non");
 
 
-        String anvit = scanner.nextLine();
+        String anvit = null;
+
+        while (anvit == null) {
+            System.out.print("Do you have children? (oui/non): ");
+            scanner.nextLine();
+            String input = scanner.nextLine();
+
+            if (input.equals("oui") || input.equals("non")) {
+                anvit = input;
+            } else {
+                System.out.println("Invalid input. Please enter 'oui' or 'non'.");
+            }
+        }
 
         String investissement = "";
         String placement = "";
@@ -121,8 +181,16 @@ public class UserView {
             placement = "INVEST_PLAC";
         }
 
-        System.out.print("Est-ce que la personne est mariée ? (oui/non) : ");
-        String input = scanner.nextLine().trim().toLowerCase();
+        String input = "";
+
+        while (!input.equals("oui") && !input.equals("non")) {
+            System.out.print("Est-ce que la personne est mariée ? (oui/non) : ");
+            input = scanner.nextLine().trim().toLowerCase();
+
+            if (!input.equals("oui") && !input.equals("non")) {
+                System.out.println("Entrée invalide. Veuillez entrer 'oui' ou 'non'.");
+            }
+        }
 
         String situationFamiliale = "Célibataire";
 
@@ -155,8 +223,21 @@ public class UserView {
             System.out.println("2. Ancienneté relation 1-3 ans");
             System.out.println("3. Ancienneté relation < 1 an");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = 0;
+
+            while (choice < 1 || choice > 3) {
+                System.out.print("Enter a choice (1, 2, or 3): ");
+                if (scanner.hasNextInt()) {
+                    choice = scanner.nextInt();
+                    scanner.nextLine(); // consume the newline
+                    if (choice < 1 || choice > 3) {
+                        System.out.println("Invalid choice. Please enter 1, 2, or 3.");
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.nextLine(); // consume invalid input
+                }
+            }
 
             String anciennete;
 
@@ -184,8 +265,22 @@ public class UserView {
             System.out.println("1. CDI ");
             System.out.println("4. CDD / Intérim");
 
-            int typeE = scanner.nextInt();
-            scanner.nextLine();
+            int typeE = 0;
+
+            while (typeE != 1 && typeE != 2) {
+                System.out.print("Enter type (1 or 2): ");
+                if (scanner.hasNextInt()) {
+                    typeE = scanner.nextInt();
+                    scanner.nextLine(); // consume newline
+                    if (typeE != 1 && typeE != 2) {
+                        System.out.println("Invalid choice. Please enter 1 or 2.");
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.nextLine(); // consume invalid input
+                }
+            }
+
 
             String typeContrat = "";
 
@@ -205,8 +300,21 @@ public class UserView {
             System.out.println("3. Privé (PME)");
             System.out.println("4. Intérim");
 
-            int secteurChoix = scanner.nextInt();
-            scanner.nextLine();
+            int secteurChoix = 0;
+
+            while (secteurChoix < 1 || secteurChoix > 4) {
+                System.out.print("Enter secteur choice (1, 2, 3, or 4): ");
+                if (scanner.hasNextInt()) {
+                    secteurChoix = scanner.nextInt();
+                    scanner.nextLine(); // consume newline
+                    if (secteurChoix < 1 || secteurChoix > 4) {
+                        System.out.println("Invalid choice. Please enter 1, 2, 3, or 4.");
+                    }
+                } else {
+                    System.out.println("Invalid input. Please enter a number.");
+                    scanner.nextLine(); // consume invalid input
+                }
+            }
 
             String secteur;
 
@@ -253,7 +361,7 @@ public class UserView {
             int ss=cs.employeScore(employeC);
 
              employeC.setScore(ss);
-            System.out.println(ss);
+
             Session.setUser(employeC);
 
 
@@ -328,12 +436,11 @@ public class UserView {
             );
 
             int ss=cs.proScore(pro);
-            System.out.println(ss);
+
             pro.setScore(ss);
 
             userService.createClient(pro);
 
-            System.out.println(pro.toString());
 
         }
 
@@ -348,7 +455,19 @@ public class UserView {
     public void getCridet() {
 
         System.out.println("enter you id ");
-        int id = scanner.nextInt();
+        int id = -1;
+
+        while (true) {
+            System.out.print("Enter ID (integer): ");
+            if (scanner.hasNextInt()) {
+                id = scanner.nextInt();
+                scanner.nextLine(); // consume newline
+                break; // valid integer entered, exit loop
+            } else {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.nextLine(); // clear invalid input
+            }
+        }
         Person client = userService.getClientById(id);
 
         if (client != null) {

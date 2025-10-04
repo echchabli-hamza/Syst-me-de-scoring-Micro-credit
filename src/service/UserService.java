@@ -39,7 +39,7 @@ public class UserService {
 
 
             if (userId == null) {
-                System.out.println("user id checking");
+
 
                 System.err.println("No user found for incident id " + incident.getEcheanceId());
                 return;

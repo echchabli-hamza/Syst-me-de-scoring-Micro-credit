@@ -48,7 +48,6 @@ public class CalculScore {
       score+=rc.evaluate(p.getAge());
 
 
-        System.out.print(score);
 
         return score;
 
@@ -83,7 +82,6 @@ public class CalculScore {
         score+=rc.evaluate(p.getAge());
 
 
-        System.out.print(score);
 
         return score;
 

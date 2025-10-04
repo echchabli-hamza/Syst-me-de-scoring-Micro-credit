@@ -64,7 +64,7 @@ public class EcheanceRepo {
 
 
     public List<Echeance> getAllByCreditId(int creditId) throws SQLException {
-        List<Echeance> list = new ArrayList<>(); System.out.println( "from aerga3");
+        List<Echeance> list = new ArrayList<>();
         String sql = "SELECT * FROM Echeance WHERE credit_id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, creditId);

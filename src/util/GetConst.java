@@ -14,7 +14,6 @@ public class GetConst {
         loadRangeRules();
     }
 
-    // --------------------- Path rules ---------------------
     private void loadPathRules() {
         String sql = "SELECT * FROM path_rules";
 
@@ -23,7 +22,7 @@ public class GetConst {
 
             while (rs.next()) {
                 String category = rs.getString("category");
-                String subCategory = rs.getString("sub_category"); // optional
+                String subCategory = rs.getString("sub_category");
                 String value = rs.getString("value");
                 int points = rs.getInt("points");
 
@@ -39,7 +38,6 @@ public class GetConst {
         }
     }
 
-    // --------------------- Range rules ---------------------
     private void loadRangeRules() {
         String sql = "SELECT * FROM range_rules";
 

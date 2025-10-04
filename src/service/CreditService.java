@@ -77,7 +77,7 @@ public class CreditService {
                 credit.setPlafond( 4 * salaire);
                 credit.setDecision(Credit.Decision.ACCORD_IMMEDIAT);
 
-                System.out.println("from ACCORD_IMMEDIAT");
+
             }
         } else {
 

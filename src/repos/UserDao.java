@@ -26,8 +26,7 @@ public class UserDao {
         try (PreparedStatement ps = conn.prepareStatement(sqlPerson, Statement.RETURN_GENERATED_KEYS) ){
             ps.setString(1, client.getNom());
             ps.setString(2, client.getPrenom());
-            System.out.println(client.getDateDeNaissance());
-            System.out.println(Date.valueOf(client.getDateDeNaissance()));
+
             ps.setDate(3, Date.valueOf(client.getDateDeNaissance()));
             ps.setString(4, client.getVille());
             ps.setString(5, client.getNombreEnfants());
@@ -43,7 +42,7 @@ public class UserDao {
 
              PersonId = id.getInt(1);
             }
-            System.out.println("person id"  +  PersonId);
+
 
                 if (client instanceof Employe) {
                     Employe e = (Employe) client;
@@ -99,9 +98,9 @@ public class UserDao {
             try (PreparedStatement ps = conn.prepareStatement(sqlPerson)) {
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
-                System.out.println("before");
+
                 if (rs.next()) {
-                    System.out.println("hiif,after");
+
 
                     nom = rs.getString("nom");
                     prenom = rs.getString("prenom");
